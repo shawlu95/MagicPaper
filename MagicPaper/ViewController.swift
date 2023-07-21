@@ -27,7 +27,13 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         super.viewWillAppear(animated)
         
         // Create a session configuration
-        let configuration = ARWorldTrackingConfiguration()
+        let configuration = ARImageTrackingConfiguration()
+        
+        if let trackedImages = ARReferenceImage.referenceImages(inGroupNamed: "NewsPaperImages", bundle: Bundle.main) {
+            configuration.trackingImages = trackedImages
+            configuration.maximumNumberOfTrackedImages = 1
+            print("found")
+        }
 
         // Run the view's session
         sceneView.session.run(configuration)
