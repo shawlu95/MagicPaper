@@ -32,7 +32,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         if let trackedImages = ARReferenceImage.referenceImages(inGroupNamed: "NewsPaperImages", bundle: Bundle.main) {
             configuration.trackingImages = trackedImages
             configuration.maximumNumberOfTrackedImages = 1
-            print("found")
         }
 
         // Run the view's session
@@ -47,4 +46,15 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
 
     // MARK: - ARSCNViewDelegate
+    func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
+        let node = SCNNode()
+        if let imageAnchor = anchor as? ARImageAnchor {
+            let plane = SCNPlane(width: imageAnchor.referenceImage.physicalSize.width, height: imageAnchor.referenceImage.physicalSize.height)
+            plane.firstMaterial?.diffuse.contents = UIColor(white: 1.0, alpha: 0.5)
+            let planeNode = SCNNode(geometry: plane)
+            planeNode.eulerAngles.x = -.pi / 2
+            node.addChildNode(planeNode)
+        }
+        return node
+    }
 }
